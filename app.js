@@ -7,6 +7,7 @@ const flash = require('connect-flash');
 const path = require('path');
 
 const authRoutes = require('./routes/auth');
+const adminRoutes = require('./routes/admin');
 
 const app = express();
 const PORT = 3000;
@@ -40,6 +41,7 @@ app.use((req, res, next) => {
     next();
 });
 
+app.use('/', adminRoutes);
 app.use('/', authRoutes);
 
 app.get('/', (req, res) => {
