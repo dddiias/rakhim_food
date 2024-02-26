@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Главная страница</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="/login">Вход</a></li>
+                <li><a href="/register">Регистрация</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <h1>Login</h1>
+        <form action="/login" method="POST">
+            <div>
+                <label for="username">Username</label>
+                <input type="text" name="username" required>
+            </div>
+            <div>
+                <label for="password">Password</label>
+                <input type="password" name="password" required>
+            </div>
+            <button type="submit">Login</button>
+        </form>
+    </main>
+    <footer>
+        <p>&copy; 2024 FastFood Ordering Site. Все права защищены.</p>
+    </footer>
+</body>
+
+</html>
