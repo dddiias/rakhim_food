@@ -8,6 +8,9 @@ const path = require('path');
 
 const authRoutes = require('./routes/auth');
 const adminRoutes = require('./routes/admin');
+const homeRoute = require('./routes/home'); 
+const cartRoutes = require('./routes/cart');
+const errorHandler = require('./middleware/errorHandler');
 
 const app = express();
 const PORT = 3000;
@@ -35,17 +38,17 @@ app.set('view engine', 'ejs');
 app.use(express.static('public'));
 
 app.use((req, res, next) => {
+    res.locals.isAuthenticated = req.session.userId ? true : false;
     res.locals.success_msg = req.flash('success_msg');
     res.locals.error_msg = req.flash('error_msg');
     res.locals.error = req.flash('error');
     next();
 });
 
+app.use('/', homeRoute);
 app.use('/', adminRoutes);
 app.use('/', authRoutes);
-
-app.get('/', (req, res) => {
-    res.render('index');
-});
+app.use('/', cartRoutes);
+app.use(errorHandler);
 
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

@@ -1,26 +1,81 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Главная страница</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="/css/style.css">
 </head>
+
 <body>
     <header>
-        <nav>
-            <ul>
-                <li><a href="/login">Вход</a></li>
-                <li><a href="/register">Регистрация</a></li>
-            </ul>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" href="/">RakhimFood</a>
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav ml-auto">
+                    <% if (!user) { %>
+                        <li class="nav-item"><a class="nav-link" href="/login">Вход</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/register">Регистрация</a></li>
+                        <% } else { %>
+                            <li class="nav-item"><a class="nav-link" href="#">Привет, <%= user.username %>!</a></li>
+                            <li class="nav-item"><a class="nav-link" href="/logout">Выйти</a></li>
+                            <% } %>
+                </ul>
+            </div>
         </nav>
     </header>
-    <main>
-        <h1>Добро пожаловать на сайт заказа еды!</h1>
-        <p>Здесь вы можете найти лучшие предложения и сделать свой заказ.</p>
+    <main class="container mt-5">
+        <h1 class="text-center">Добро пожаловать на сайт заказа еды!</h1>
+        <p class="text-center">Здесь вы можете найти лучшие предложения и сделать свой заказ.</p>
+        <div class="row">
+            <% products.forEach(product=> { %>
+                <div class="col-md-4 mb-4">
+                    <div class="card">
+                        <img src="<%= product.images %>" class="card-img-top" alt="<%= product.name %>">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                <%= product.name %>
+                            </h5>
+                            <p class="card-text">
+                                <%= product.description %>
+                            </p>
+                            <p class="card-text">Цена: <%= product.price %> тг.</p>
+                            <button class="btn btn-primary add-to-cart-btn" <% if (user) { %>
+                                data-userid="<%= user.id %>"
+                                    data-productid="<%= product._id %>"
+                                        data-productprice="<%= product.price %>"
+                                            data-productname="<%= product.name %>"
+                                                <% } else { %>
+                                                    onclick="alert('Пожалуйста, авторизуйтесь, чтобы добавить товар в
+                                                    корзину');"
+                                                    <% } %>>
+                                                        Добавить в корзину
+                            </button>
+
+
+
+                        </div>
+                    </div>
+                </div>
+                <% }); %>
+        </div>
+
+
+        <div class="text-center">
+            <button class="btn btn-primary view-cart-btn">Просмотреть корзину</button>
+        </div>
+
+
     </main>
-    <footer>
-        <p>&copy; 2024 FastFood Ordering Site. Все права защищены.</p>
+    <footer class="text-center mt-4">
+        <p>&copy; Dias Salakhutdinov SE-2203 </p>
     </footer>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="/js/script.js"></script>
 </body>
+
 </html>
