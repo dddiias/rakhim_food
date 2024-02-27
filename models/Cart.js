@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 
 const cartItemSchema = new mongoose.Schema({
     foodItemId: { type: mongoose.Schema.Types.ObjectId, ref: 'FoodItem' },
+    productName: String,
     quantity: Number,
     price: Number
 });

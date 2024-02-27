@@ -13,15 +13,8 @@ router.post('/register', async (req, res) => {
       const hashedPassword = await bcrypt.hash(password, 10);
       const newUser = new User({ username, password: hashedPassword, name, birthdate, address, phoneNumber });
       await newUser.save();
-
-      const newCart = new Cart({
-          userId: newUser._id,
-          items: [],
-          total: 0
-      });
-      await newCart.save();
-
       res.redirect('/login');
+      
   } catch (error) {
       console.log(error);
       res.redirect('/register');

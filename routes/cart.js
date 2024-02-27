@@ -37,13 +37,32 @@ router.post('/cart/add', async (req, res) => {
     }
 });
 
+router.post('/cart/remove', async (req, res) => {
+    try {
+        const { userId, productId } = req.body;
+        const cart = await Cart.findOne({ userId });
+        if (cart) {
+            const updatedItems = cart.items.filter(item => item._id.toString() !== productId);
+            cart.items = updatedItems;
+            cart.total = updatedItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
+            await cart.save();
+            res.status(200).json({ message: 'Товар успешно удален из корзины', cart });
+        } else {
+            res.status(404).json({ message: 'Корзина не найдена' });
+        }
+    } catch (error) {
+        console.error('Ошибка при удалении товара из корзины:', error);
+        res.status(500).json({ error: 'Ошибка при удалении товара из корзины: ' + error.message });
+    }
+});
+
 
 router.get('/cart/view', async (req, res) => {
     try {
         const userId = req.session.user.id;
         const cart = await Cart.findOne({ userId });
         if (cart) {
-            res.render('cart', { cartItems: cart.items, cartTotal: cart.total });
+            res.render('cart', { user: req.session.user, cartItems: cart.items, cartTotal: cart.total });
         } else {
             res.status(404).json({ message: 'Корзина не найдена' });
         }
@@ -52,45 +71,46 @@ router.get('/cart/view', async (req, res) => {
     }
 });
 
-router.post('/remove', async (req, res) => {
+router.post('/create-order', async (req, res) => {
     try {
-        const userId = req.session.user.id;
-        const { foodItemId } = req.body;
+        const { userId, phone, address, paymentMethod } = req.body;
+
         const cart = await Cart.findOne({ userId });
-        if (cart) {
-            const updatedItems = cart.items.filter(item => item.foodItemId !== foodItemId);
-            cart.items = updatedItems;
-            await cart.save();
-            res.status(200).json(cart);
-        } else {
-            res.status(404).json({ message: 'Корзина не найдена' });
+        if (!cart) {
+            return res.status(400).send('Корзина не найдена');
         }
+
+        const order = new Order({
+            userId,
+            items: cart.items.map(item => ({
+                productId: item.productId,
+                quantity: item.quantity,
+                price: item.price
+            })),
+            total: cart.items.reduce((total, currentItem) => total + currentItem.price * currentItem.quantity, 0),
+            phone,
+            address,
+            paymentMethod,
+            status: 'Новый'
+        });
+
+        await order.save();
+
+        await Cart.findOneAndDelete({ userId });
+
+        res.redirect('/order');
     } catch (error) {
-        res.status(500).json({ error: 'Ошибка при удалении товара из корзины: ' + error });
+        console.error('Ошибка при создании заказа:', error);
+        res.status(500).send('Ошибка на сервере при создании заказа');
     }
 });
 
-router.post('/checkout', async (req, res) => {
-    try {
-        const userId = req.session.user.id;
-        const cart = await Cart.findOne({ userId });
-        if (cart && cart.items.length > 0) {
-            const order = new Order({
-                userId: cart.userId,
-                items: cart.items,
-                total: cart.total,
-            });
-            await order.save();
-            cart.items = [];
-            cart.total = 0;
-            await cart.save();
-            res.status(200).json({ message: 'Заказ успешно оформлен' });
-        } else {
-            res.status(400).json({ message: 'Невозможно оформить заказ: корзина пуста или не найдена' });
-        }
-    } catch (error) {
-        res.status(500).json({ error: 'Ошибка при оформлении заказа: ' + error });
-    }
+router.get('/checkout', (req, res) => {
+    res.render('checkout', { user: req.user });
 });
+
+
+
+
 
 module.exports = router;
