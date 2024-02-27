@@ -10,6 +10,7 @@ const authRoutes = require('./routes/auth');
 const adminRoutes = require('./routes/admin');
 const homeRoute = require('./routes/home'); 
 const cartRoutes = require('./routes/cart');
+const orderRoutes = require('./routes/order');
 const errorHandler = require('./middleware/errorHandler');
 
 const app = express();
@@ -49,6 +50,7 @@ app.use('/', homeRoute);
 app.use('/', adminRoutes);
 app.use('/', authRoutes);
 app.use('/', cartRoutes);
+app.use('/', orderRoutes);
 app.use(errorHandler);
 
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

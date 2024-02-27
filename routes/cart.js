@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const Order = require('../models/Order');
 const Cart = require('../models/Cart');
 
 router.post('/cart/add', async (req, res) => {
@@ -73,35 +74,34 @@ router.get('/cart/view', async (req, res) => {
 
 router.post('/create-order', async (req, res) => {
     try {
-        const { userId, phone, address, paymentMethod } = req.body;
+        const userId = req.session.user.id;
+        const { phone, address, paymentMethod } = req.body;
 
         const cart = await Cart.findOne({ userId });
-        if (!cart) {
-            return res.status(400).send('Корзина не найдена');
+
+        if (!cart || cart.items.length === 0) {
+            return res.status(400).json({ error: 'Корзина пуста. Невозможно создать заказ.' });
         }
 
-        const order = new Order({
-            userId,
-            items: cart.items.map(item => ({
-                productId: item.productId,
-                quantity: item.quantity,
-                price: item.price
-            })),
-            total: cart.items.reduce((total, currentItem) => total + currentItem.price * currentItem.quantity, 0),
-            phone,
-            address,
-            paymentMethod,
-            status: 'Новый'
+        const newOrder = new Order({
+            userId: req.session.user.id, 
+            items: cart.items,
+            total: cart.total,
+            phone: req.body.phone,
+            address: req.body.address,
+            paymentMethod: req.body.paymentMethod,
         });
+        
 
-        await order.save();
+        await newOrder.save();
 
-        await Cart.findOneAndDelete({ userId });
+        cart.items = [];
+        cart.total = 0;
+        await cart.save();
 
-        res.redirect('/order');
+        res.redirect(`/order/${newOrder._id}`);
     } catch (error) {
-        console.error('Ошибка при создании заказа:', error);
-        res.status(500).send('Ошибка на сервере при создании заказа');
+        res.status(500).json({ error: 'Ошибка при создании заказа: ' + error });
     }
 });
 
