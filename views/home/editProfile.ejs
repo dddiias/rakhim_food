@@ -16,7 +16,8 @@
         </nav>
     </header>
     <main class="container mt-4">
-        <h1>Изменение данных пользователя <%= user.username %></h1>
+        <h1>Изменение данных пользователя <%= user.username %>
+        </h1>
         <form action="/update" method="POST">
             <div class="form-group">
                 <label for="name">Имя</label>
@@ -28,15 +29,18 @@
             </div>
             <div class="form-group">
                 <label for="birthdate">Дата рождения</label>
-                <input type="date" class="form-control" id="birthdate" name="birthdate" value="<%= user.birthdate.toISOString().substring(0, 10) %>" required>
+                <input type="date" class="form-control" id="birthdate" name="birthdate"
+                    value="<%= user.birthdate.toISOString().substring(0, 10) %>" required>
             </div>
             <div class="form-group">
                 <label for="address">Адрес</label>
-                <input type="text" class="form-control" id="address" name="address" value="<%= user.address %>" required>
+                <input type="text" class="form-control" id="address" name="address" value="<%= user.address %>"
+                    required>
             </div>
             <div class="form-group">
                 <label for="phoneNumber">Номер телефона</label>
-                <input type="text" class="form-control" id="phoneNumber" name="phoneNumber" value="<%= user.phoneNumber %>" required>
+                <input type="text" class="form-control" id="phoneNumber" name="phoneNumber"
+                    value="<%= user.phoneNumber %>" required>
             </div>
             <button type="submit" class="btn btn-primary">Сохранить изменения</button>
         </form>

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Заказы</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" href="/">RakhimFood Admin</a>
+        </nav>
+    </header>
+    <main class="container mt-4">
+        <h1>Все заказы</h1>
+        <form action="/admin/orders" method="GET" class="mb-3">
+            <button type="submit" name="sort" value="desc" class="btn btn-primary">Сортировать по цене (desc)</button>
+            <button type="submit" name="sort" value="asc" class="btn btn-primary">Сортировать по цене (asc)</button>
+        </form>
+        <form action="/admin/ordersByDay" method="GET" class="mb-3">
+            <div class="form-row">
+                <div class="col">
+                    <label for="startDate">Начало периода:</label>
+                    <input type="date" id="startDate" name="startDate" class="form-control">
+                </div>
+                <div class="col">
+                    <label for="endDate">Конец периода:</label>
+                    <input type="date" id="endDate" name="endDate" class="form-control">
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary mt-2">Фильтрация по дню</button>
+        </form>
+        <% if (orders.length> 0) { %>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Номер заказа</th>
+                        <th>ID пользователя</th>
+                        <th>Всего</th>
+                        <th>Номер телефона</th>
+                        <th>Адрес</th>
+                        <th>Статус</th>
+                        <th>Дата</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% orders.forEach(order=> { %>
+                        <tr>
+                            <td><a href="/admin/orders/<%= order._id %>">
+                                    <%= order._id %>
+                                </a></td>
+                            <td>
+                                <%= order.userId %>
+                            </td>
+                            <td>$<%= order.total.toFixed(2) %>
+                            </td>
+                            <td>
+                                <%= order.phone %>
+                            </td>
+                            <td>
+                                <%= order.address %>
+                            </td>
+                            <td>
+                                <%= order.status %>
+                            </td>
+                            <td>
+                                <%= order.createdAt.toDateString() %>
+                            </td>
+                        </tr>
+                        <% }); %>
+                </tbody>
+            </table>
+            <% } else { %>
+                <p>Нет заказов.</p>
+                <% } %>
+    </main>
+    <footer class="text-center mt-4">
+        <p>&copy; Dias Salakhutdinov SE-2203 </p>
+    </footer>
+</body>
+
+</html>

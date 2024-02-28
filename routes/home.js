@@ -7,7 +7,7 @@ router.get('/', async (req, res) => {
     try {
         const products = await Product.find(); 
         const user = req.session.user || null; 
-        res.render('index', { products, user });
+        res.render('home/index', { products, user });
     } catch (error) {
         console.error(error);
         res.status(500).send('Ошибка сервера');
@@ -17,7 +17,7 @@ router.get('/index', async (req, res) => {
     try {
         const products = await Product.find(); 
         const user = req.session.user || null; 
-        res.render('index', { products, user }); 
+        res.render('home/index', { products, user }); 
     } catch (error) {
         console.error(error);
         res.status(500).send('Ошибка сервера');

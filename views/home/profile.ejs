@@ -28,7 +28,7 @@
             </div>
         </nav>
     </header>
-    <main>
+    <main class="container mt-4">
         <h1>Профиль пользователя <%= user.username %>
         </h1>
         <% if (user) { %>
@@ -43,9 +43,9 @@
             <a href="/edit" class="btn btn-primary">Изменить данные</a>
             <h2>Список заказов</h2>
             <% if (orders.length> 0) { %>
-                <ul>
+                <ul class="list-group">
                     <% orders.forEach(order=> { %>
-                        <li>
+                        <li class="list-group-item">
                             <a href="/order/<%= order._id %>">
                                 Заказ №<%= order._id %>, Статус: <%= order.status %>, Дата создания: <%=
                                             order.createdAt.toLocaleDateString() %>

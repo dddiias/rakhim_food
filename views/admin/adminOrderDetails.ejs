@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Детали заказа</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" href="/">RakhimFood Admin</a>
+        </nav>
+    </header>
+    <main class="container mt-4">
+        <h1>Детали заказа</h1>
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Номер заказа: <%= order._id %>
+                </h5>
+                <p class="card-text">ID пользователя: <%= order.userId %>
+                </p>
+                <p class="card-text">Всего: $<%= order.total.toFixed(2) %>
+                </p>
+                <p class="card-text">Номер телефона: <%= order.phone %>
+                </p>
+                <p class="card-text">Адрес: <%= order.address %>
+                </p>
+                <form action="/admin/orders/<%= order._id %>/update-status" method="POST">
+                    <div class="form-group">
+                        <label for="status">Статус:</label>
+                        <select class="form-control" id="status" name="status">
+                            <option value="Ожидает" <%=order.status==='Ожидает' ? 'selected' : '' %>>Ожидает</option>
+                            <option value="Готовится" <%=order.status==='Готовится' ? 'selected' : '' %>>Готовится
+                            </option>
+                            <option value="Завершен" <%=order.status==='Завершен' ? 'selected' : '' %>>Завершен</option>
+                            <option value="Отменен" <%=order.status==='Отменен' ? 'selected' : '' %>>Отменен</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Сохранить</button>
+                </form>
+                <hr>
+                <h5 class="card-title">Items:</h5>
+                <ul class="list-group">
+                    <% order.items.forEach(item=> { %>
+                        <li class="list-group-item">
+                            ID продукта: <%= item.productId %><br>
+                                Название продукта: <%= item.productName %><br>
+                                    Количество: <%= item.quantity %><br>
+                                        Цена: $<%= item.price.toFixed(2) %>
+                        </li>
+                        <% }); %>
+                </ul>
+            </div>
+        </div>
+    </main>
+    <footer class="text-center mt-4">
+        <p>&copy; Dias Salakhutdinov SE-2203 </p>
+    </footer>
+</body>
+
+</html>

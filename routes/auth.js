@@ -4,27 +4,28 @@ const User = require('../models/User');
 const router = express.Router();
 
 router.get('/register', (req, res) => {
-    res.render('register');
+  res.render('auth/register', { user: req.user });
 });
 
 router.post('/register', async (req, res) => {
   const { username, password, name, birthdate, address, phoneNumber } = req.body;
   try {
-      const hashedPassword = await bcrypt.hash(password, 10);
-      const newUser = new User({ username, password: hashedPassword, name, birthdate, address, phoneNumber });
-      await newUser.save();
-      res.redirect('/login');
-      
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const newUser = new User({ username, password: hashedPassword, name, birthdate, address, phoneNumber });
+    await newUser.save();
+    res.redirect('/login');
+
   } catch (error) {
-      console.log(error);
-      res.redirect('/register');
+    console.log(error);
+    res.redirect('/register');
   }
 });
 
 
 router.get('/login', (req, res) => {
-    res.render('login');
+  res.render('auth/login', { user: req.user });
 });
+
 
 router.post('/login', async (req, res) => {
   const { username, password } = req.body;
@@ -32,11 +33,11 @@ router.post('/login', async (req, res) => {
   if (user && await bcrypt.compare(password, user.password)) {
     req.session.isAuthenticated = true;
     req.session.user = {
-        id: user.id, 
-        name: user.name, 
-        username: user.username
+      id: user.id,
+      name: user.name,
+      username: user.username
     };
-    
+
     res.redirect('/');
   } else {
     req.flash('error_msg', 'Invalid username or password');
@@ -46,13 +47,13 @@ router.post('/login', async (req, res) => {
 
 router.get('/logout', (req, res) => {
   req.session.destroy(err => {
-      if (err) {
-          console.error('Ошибка при попытке выхода из системы:', err);
-          return res.redirect('/');
-      }
+    if (err) {
+      console.error('Ошибка при попытке выхода из системы:', err);
+      return res.redirect('/');
+    }
 
-      res.clearCookie('connect.sid'); 
-      res.redirect('/index');
+    res.clearCookie('connect.sid');
+    res.redirect('/index');
   });
 });
 

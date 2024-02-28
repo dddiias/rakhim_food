@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Корзина</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" href="/">RakhimFood</a>
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav ml-auto">
+                    <% if (!user) { %>
+                        <li class="nav-item"><a class="nav-link" href="/login">Вход</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/register">Регистрация</a></li>
+                        <% } else { %>
+                            <li class="nav-item"><a class="nav-link" href="/profile">Привет, <%= user.username %>!</a>
+                            </li>
+                            <li class="nav-item"><a class="nav-link" href="/logout">Выйти</a></li>
+                            <% } %>
+                </ul>
+            </div>
+        </nav>
+    </header>
+    <main class="container mt-4">
+        <h1>Корзина</h1>
+        <ul class="list-group">
+            <% cartItems.forEach(item=> { %>
+                <li class="list-group-item">
+                    <%= item.productName %> - <%= item.price %> тг.
+                            <button class="btn btn-danger remove-from-cart-btn" data-userid="<%= user.id %>"
+                                data-productid="<%= item._id %>">
+                                Удалить из корзины
+                            </button>
+                </li>
+                <% }); %>
+        </ul>
+        <p>Total: <%= cartTotal %> тг.</p>
+        <button id="checkout-btn" class="btn btn-primary">Заказать</button>
+    </main>
+    <footer class="text-center mt-4">
+        <p>&copy; Dias Salakhutdinov SE-2203 </p>
+    </footer>
+    <script src="/js/script.js"></script>
+</body>
+
+</html>

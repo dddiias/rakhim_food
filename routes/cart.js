@@ -47,7 +47,7 @@ router.post('/cart/remove', async (req, res) => {
             cart.items = updatedItems;
             cart.total = updatedItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
             await cart.save();
-            res.status(200).json({ message: 'Товар успешно удален из корзины', cart });
+            res.redirect('/cart/view');
         } else {
             res.status(404).json({ message: 'Корзина не найдена' });
         }
@@ -63,7 +63,7 @@ router.get('/cart/view', async (req, res) => {
         const userId = req.session.user.id;
         const cart = await Cart.findOne({ userId });
         if (cart) {
-            res.render('cart', { user: req.session.user, cartItems: cart.items, cartTotal: cart.total });
+            res.render('cart/cart', { user: req.session.user, cartItems: cart.items, cartTotal: cart.total });
         } else {
             res.status(404).json({ message: 'Корзина не найдена' });
         }
@@ -84,14 +84,14 @@ router.post('/create-order', async (req, res) => {
         }
 
         const newOrder = new Order({
-            userId: req.session.user.id, 
+            userId: req.session.user.id,
             items: cart.items,
             total: cart.total,
             phone: req.body.phone,
             address: req.body.address,
             paymentMethod: req.body.paymentMethod,
         });
-        
+
 
         await newOrder.save();
 
@@ -106,7 +106,7 @@ router.post('/create-order', async (req, res) => {
 });
 
 router.get('/checkout', (req, res) => {
-    res.render('checkout', { user: req.user });
+    res.render('cart/checkout', { user: req.user });
 });
 
 

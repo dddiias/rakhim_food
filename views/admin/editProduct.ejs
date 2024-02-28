@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Редактирование Продукта</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" href="/">RakhimFood Admin</a>
+        </nav>
+    </header>
+    <div class="container">
+        <h1 class="mt-5">Редактирование Продукта</h1>
+        <form action="/admin/products/update/<%= product._id %>" method="POST">
+            <div class="form-group">
+                <label for="name">Название</label>
+                <input type="text" class="form-control" id="name" name="name" value="<%= product.name %>" required>
+            </div>
+            <div class="form-group">
+                <label for="description">Описание</label>
+                <textarea class="form-control" id="description" name="description" rows="5"
+                    required><%= product.description %></textarea>
+            </div>
+            <div class="form-group">
+                <label for="price">Цена</label>
+                <input type="number" class="form-control" id="price" name="price" value="<%= product.price %>" required>
+            </div>
+            <div class="form-group">
+                <label for="images">Ссылка на изображение</label>
+                <input type="text" class="form-control" id="images" name="images" value="<%= product.images %>"
+                    required>
+            </div>
+            <button type="submit" class="btn btn-primary">Обновить Продукт</button>
+        </form>
+    </div>
+</body>
+
+</html>

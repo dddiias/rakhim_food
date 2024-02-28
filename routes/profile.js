@@ -17,7 +17,7 @@ router.get('/profile', loadUser, async (req, res) => {
 
         const orders = await Order.find({ userId: userId });
 
-        res.render('profile', { user: user, orders: orders });
+        res.render('home/profile', { user: user, orders: orders });
 
     } catch (error) {
         console.error('Ошибка при загрузке профиля пользователя:', error);
@@ -26,7 +26,7 @@ router.get('/profile', loadUser, async (req, res) => {
 });
 
 router.get('/edit', loadUser, (req, res) => {
-    res.render('editProfile', { user: req.user });
+    res.render('home/editProfile', { user: req.user });
 });
 
 router.post('/update', loadUser, async (req, res) => {
