@@ -5,12 +5,14 @@ const MongoStore = require('connect-mongo');
 const bodyParser = require('body-parser');
 const flash = require('connect-flash');
 const path = require('path');
+const { loadUser } = require('./middleware/user');
 
 const authRoutes = require('./routes/auth');
 const adminRoutes = require('./routes/admin');
-const homeRoute = require('./routes/home'); 
+const homeRoutes = require('./routes/home'); 
 const cartRoutes = require('./routes/cart');
 const orderRoutes = require('./routes/order');
+const profileRoutes = require('./routes/profile');
 const errorHandler = require('./middleware/errorHandler');
 
 const app = express();
@@ -34,6 +36,7 @@ app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(flash());
+app.use(loadUser);
 
 app.set('view engine', 'ejs');
 app.use(express.static('public'));
@@ -46,11 +49,12 @@ app.use((req, res, next) => {
     next();
 });
 
-app.use('/', homeRoute);
+app.use('/', homeRoutes);
 app.use('/', adminRoutes);
 app.use('/', authRoutes);
 app.use('/', cartRoutes);
 app.use('/', orderRoutes);
+app.use('/', profileRoutes);
 app.use(errorHandler);
 
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

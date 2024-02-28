@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Изменение данных</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" href="/">RakhimFood</a>
+        </nav>
+    </header>
+    <main class="container mt-4">
+        <h1>Изменение данных пользователя <%= user.username %></h1>
+        <form action="/update" method="POST">
+            <div class="form-group">
+                <label for="name">Имя</label>
+                <input type="text" class="form-control" id="name" name="name" value="<%= user.name %>" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Новый пароль</label>
+                <input type="password" class="form-control" id="password" name="password" required>
+            </div>
+            <div class="form-group">
+                <label for="birthdate">Дата рождения</label>
+                <input type="date" class="form-control" id="birthdate" name="birthdate" value="<%= user.birthdate.toISOString().substring(0, 10) %>" required>
+            </div>
+            <div class="form-group">
+                <label for="address">Адрес</label>
+                <input type="text" class="form-control" id="address" name="address" value="<%= user.address %>" required>
+            </div>
+            <div class="form-group">
+                <label for="phoneNumber">Номер телефона</label>
+                <input type="text" class="form-control" id="phoneNumber" name="phoneNumber" value="<%= user.phoneNumber %>" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Сохранить изменения</button>
+        </form>
+    </main>
+    <footer class="text-center mt-4">
+        <p>&copy; Dias Salakhutdinov SE-2203 </p>
+    </footer>
+</body>
+
+</html>
